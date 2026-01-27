@@ -4,11 +4,29 @@ const router = Router();
 
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("..");
-const { User } = require("../db/index");
+const { User, Admin } = require("../db/index");
 
 // Admin Routes
-router.post("/signup", (req, res) => {
+router.post("/signup", async (req, res) => {
   // Implement admin signup logic
+  const username = req.body.username;
+  const password = req.body.password;
+
+  await Admin.create({
+    username,
+    password,
+  });
+
+  const token = jwt.sign(
+    {
+      username,
+    },
+    JWT_SECRET,
+  );
+
+  res.json({
+    token: token,
+  });
 });
 
 router.post("/signin", async (req, res) => {
