@@ -19,7 +19,7 @@ router.post("/signup", async (req, res) => {
         message: "Admin created successfully!",
       });
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(403).json({
         message: "Could not create Admin!",
       });
