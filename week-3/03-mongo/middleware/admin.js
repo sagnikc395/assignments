@@ -15,6 +15,10 @@ function adminMiddleware(req, res, next) {
     if (value) {
       // if value exists then call next
       await next();
+    } else {
+      res.status(403).json({
+        msg: "user doesnt exist",
+      });
     }
   });
 }
