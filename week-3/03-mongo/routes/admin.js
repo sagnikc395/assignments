@@ -57,7 +57,7 @@ router.get("/courses", adminMiddleware, async (req, res) => {
   const response = await Course.find({});
 
   res.json({
-    courses: response,
+    courses: response, 
   });
 });
 
