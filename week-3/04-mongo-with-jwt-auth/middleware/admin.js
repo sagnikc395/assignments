@@ -13,12 +13,18 @@ function adminMiddleware(req, res, next) {
   const jwtToken = words[1];
 
   //verify the jwt using the secret
-  const decodedValue = jwt.verify(jwtToken, JWT_SECRET);
-  if (decodedValue.username && decode.type === "user") {
-    next();
-  } else {
-    res.status(403).json({
-      msg: "you are not authenticated!",
+  try {
+    const decodedValue = jwt.verify(jwtToken, JWT_SECRET);
+    if (decodedValue.username && decode.type === "user") {
+      next();
+    } else {
+      res.status(403).json({
+        msg: "you are not authenticated!",
+      });
+    }
+  } catch (err) {
+    res.json({
+      msg: "incorrect inputs",
     });
   }
 }
