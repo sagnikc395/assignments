@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const router = Router();
 const userMiddleware = require("../middleware/user");
-const { User } = require("../db");
+const { User, Course } = require("../db");
+const { default: mongoose } = require("mongoose");
 
 // User Routes
 router.post("/signup", async (req, res) => {
@@ -27,8 +28,28 @@ router.get("/courses", async (req, res) => {
   });
 });
 
-router.post("/courses/:courseId", userMiddleware, (req, res) => {
+router.post("/courses/:courseId", userMiddleware, async (req, res) => {
   // Implement course purchase logic
+  const courseId = req.params.courseId;
+  const username = req.params.username;
+
+  //update the user object in the mongodb database.
+  await User.updateOne(
+    {
+      username: username,
+    },
+    {
+      purchasedCourses: {
+        $push: new mongoose.Types.ObjectId(courseId),
+      },
+    },
+  ).catch((e) => {
+    console.log(e);
+  });
+
+  res.json({
+    message: "Course Purchased Successfully!",
+  });
 });
 
 router.get("/purchasedCourses", userMiddleware, (req, res) => {
